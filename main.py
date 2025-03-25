@@ -1,10 +1,16 @@
-from flask import Flask, jsonify, render_template_string
+from flask import Flask, jsonify
+from gtfs_tools import find_oilme_stops_and_routes
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def home():
-    return '<h1>Tere tulemast Tallinna liinide äppi!</h1>'
+    return "<h1>Tallinna bussid</h1><p>Vaata <a href='/api/oilme-routes'>Õilme liinide andmeid</a></p>"
+
+@app.route("/api/oilme-routes")
+def oilme_routes():
+    result = find_oilme_stops_and_routes()
+    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
