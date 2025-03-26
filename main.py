@@ -1,17 +1,17 @@
-from flask import Flask, jsonify
-from gtfs_tools import find_oilme_stops_and_routes
-from gtfs_tools import get_schedule_for_route
+from flask import Flask, jsonify, render_template
+from gtfs_tools import find_oilme_stops_and_routes, get_schedule_for_route
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
 @app.route("/")
 def home():
-    return "<h1>Tallinna bussid</h1><p>Vaata <a href='/api/oilme-routes'>Õilme liinide andmeid</a></p>"
+    data = find_oilme_stops_and_routes()
+    return render_template("index.html", routes=data["routes_with_oilme"])
 
-@app.route("/api/oilme-routes")
-def oilme_routes():
-    result = find_oilme_stops_and_routes()
-    return jsonify(result)
+@app.route("/api/schedule/<route>")
+def schedule(route):
+    schedule = get_schedule_for_route(route)
+    return jsonify(schedule)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
