@@ -1,14 +1,10 @@
-print("App starting...")
-from flask import Flask, jsonify, render_template
-from gtfs_tools import find_oilme_stops_and_routes, get_schedule_for_route
-
-print("Imports successful")
-app = Flask(__name__, template_folder="templates", static_folder="static")
-
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from gtfs_tools import find_oilme_stops_and_routes, get_schedule_for_route
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+@app.before_request
+def before_any():
+    print("Request received:", request.path)
 
 @app.route("/")
 def home():
