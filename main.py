@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, render_template
 from gtfs_tools import find_oilme_stops_and_routes, get_schedule_for_route
 
-app = Flask(__name__, template_folder="templates")
+app = Flask(__name__, template_folder="templates", static_folder="static")
 
 @app.route("/")
 def home():
@@ -10,8 +10,7 @@ def home():
 
 @app.route("/api/schedule/<route>")
 def schedule(route):
-    schedule = get_schedule_for_route(route)
-    return jsonify(schedule)
+    return jsonify(get_schedule_for_route(route))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
